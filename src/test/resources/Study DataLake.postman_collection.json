@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ab4170b1-970d-4ff8-b04b-28b1504a0c20",
+		"_postman_id": "ef9ef35f-a302-4fa0-b0f0-b15a387362ba",
 		"name": "Study DataLake",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -51,10 +51,12 @@
 					"raw": "{\n    \"topic\": null,\n    \"dateTimeCreation\": null,\n    \"tag\": null,\n    \"url\": null,\n    \"description\": null,\n    \"consumed\": null\n}"
 				},
 				"url": {
-					"raw": "{{url}}/study",
+					"raw": "http://localhost:3000/study",
+					"protocol": "http",
 					"host": [
-						"{{url}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"study"
 					]
@@ -68,10 +70,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/study/devops/findByTag?tag=codePipeline",
+					"raw": "http://localhost:3000/study/devops/findByTag?tag=codePipeline",
+					"protocol": "http",
 					"host": [
-						"{{url}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"study",
 						"devops",
@@ -93,10 +97,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/study/devops/findByIsConsumed?isconsumed=false",
+					"raw": "http://localhost:3000/study/devops/findByIsConsumed?isconsumed=false",
+					"protocol": "http",
 					"host": [
-						"{{url}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"study",
 						"devops",
