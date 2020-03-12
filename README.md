@@ -82,38 +82,6 @@ aws cloudformation describe-stacks \
     --query 'Stacks[].Outputs'
 ```
 
-## Testing
-
-### Running unit tests
-We use `JUnit` for testing our code.
-Unit tests in this sample package mock out the DynamoDBTableMapper class for Order objects.
-Unit tests do not require connectivity to a DynamoDB endpoint. You can run unit tests with the
-following command:
-
-```bash
-mvn test
-```
-
-### Running integration tests
-Integration tests in this sample package do not mock out the DynamoDBTableMapper and use a real
-AmazonDynamoDB client instance. Integration tests require connectivity to a DynamoDB endpoint, and
-as such the POM starts DynamoDB Local from the Dockerhub repository for integration tests.
-
-```bash
-mvn verify
-```
-
-### Running end to end tests through the SAM CLI Local endpoint
-Running the following end-to-end tests requires Python 3 and the `requests` pip
-package to be installed. For these tests to succeed,
-```bash
-pip3 install requests
-python3 src/test/resources/api_tests.py 3
-```
-
-The number that follows the test script name is the number of orders to create in the
-test. For these tests to work, you must follow the steps for [local development](#local-development).  
-
 # Appendix
 
 ## AWS CLI commands
