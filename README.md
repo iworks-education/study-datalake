@@ -1,4 +1,4 @@
- AWS SAM Application for Managing Study Data Lake
+## AWS SAM Application for Managing Study Data Lake
 
 This is a sample application to demonstrate how to build an application on AWS Serverless Envinronment using the
 AWS SAM, Amazon API Gateway, AWS Lambda and Amazon DynamoDB.
