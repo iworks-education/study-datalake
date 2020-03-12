@@ -11,10 +11,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/study/devops/findByPeriod?starts=2015-02-01&ends=2015-08-09",
+					"raw": "http://localhost:3000/study/devops/findByPeriod?starts=2015-02-01&ends=2015-08-09",
+					"protocol": "http",
 					"host": [
-						"{{url}}"
+						"localhost"
 					],
+					"port": "3000",
 					"path": [
 						"study",
 						"devops",
