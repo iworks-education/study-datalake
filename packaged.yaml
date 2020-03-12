@@ -1,0 +1,92 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'study-datalake
+
+  Rest API to manage a Data Lake of study links
+
+  '
+Globals:
+  Function:
+    MemorySize: 512
+    Timeout: 20
+Outputs:
+  CreateStudyRecordFunction:
+    Description: CreateStudyRecord Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - CreateStudyRecordFunction
+      - Arn
+  GetStudyRecordsByIsConsumedFunction:
+    Description: GetStudyRecordsByIsConsumed Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GetStudyRecordsByIsConsumedFunction
+      - Arn
+  GetStudyRecordsByPeriodFunction:
+    Description: GetStudyRecordsByPeriod Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GetStudyRecordsByPeriodFunction
+      - Arn
+  GetStudyRecordsByTagFunction:
+    Description: GetStudyRecordsByTag Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - GetStudyRecordsByTagFunction
+      - Arn
+Resources:
+  CreateStudyRecordFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        CreateStudyRecord:
+          Properties:
+            Method: post
+            Path: /study
+          Type: Api
+      Handler: br.com.iwe.handler.CreateStudyRecord::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GetStudyRecordsByIsConsumedFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GetStudyRecordsByIsConsumed:
+          Properties:
+            Method: get
+            Path: /study/{topic}/findByIsConsumed
+            RequestParameters:
+            - method.request.querystring.isconsumed
+          Type: Api
+      Handler: br.com.iwe.handler.GetStudyRecordsByIsConsumed::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GetStudyRecordsByPeriodFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GetStudyRecordsByPeriod:
+          Properties:
+            Method: get
+            Path: /study/{topic}/findByPeriod
+            RequestParameters:
+            - method.request.querystring.starts
+            - method.request.querystring.ends
+          Type: Api
+      Handler: br.com.iwe.handler.GetStudyRecordsByPeriod::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+  GetStudyRecordsByTagFunction:
+    Properties:
+      CodeUri: s3://aws-sam-fiap-deployt/896a140ec24d1c84f917b82d6bdddd3f
+      Events:
+        GetStudyRecordsByTag:
+          Properties:
+            Method: get
+            Path: /study/{topic}/findByTag
+            RequestParameters:
+            - method.request.querystring.tag
+          Type: Api
+      Handler: br.com.iwe.handler.GetStudyRecordsByTag::handleRequest
+      Runtime: java8
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

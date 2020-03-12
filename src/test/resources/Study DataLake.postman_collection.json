@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "ab4170b1-970d-4ff8-b04b-28b1504a0c20",
+		"name": "Study DataLake",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "findByPeriod",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/study/devops/findByPeriod?starts=2015-02-01&ends=2015-08-09",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"study",
+						"devops",
+						"findByPeriod"
+					],
+					"query": [
+						{
+							"key": "starts",
+							"value": "2015-02-01"
+						},
+						{
+							"key": "ends",
+							"value": "2015-08-09"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createStudyRecord",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"topic\": null,\n    \"dateTimeCreation\": null,\n    \"tag\": null,\n    \"url\": null,\n    \"description\": null,\n    \"consumed\": null\n}"
+				},
+				"url": {
+					"raw": "{{url}}/study",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"study"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findByTag",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/study/devops/findByTag?tag=codePipeline",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"study",
+						"devops",
+						"findByTag"
+					],
+					"query": [
+						{
+							"key": "tag",
+							"value": "codePipeline"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "findByIsConsumed",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/study/devops/findByIsConsumed?isconsumed=false",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"study",
+						"devops",
+						"findByIsConsumed"
+					],
+					"query": [
+						{
+							"key": "isconsumed",
+							"value": "false"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

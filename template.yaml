@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    study-datalake
+
+    Rest API to manage a Data Lake of study links
+
+Globals:
+    Function:
+        Timeout: 20
+        MemorySize: 512
+
+Resources:
+
+  CreateStudyRecordFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.CreateStudyRecord::handleRequest
+     Runtime: java8
+     Events:
+       CreateStudyRecord:
+         Type: Api
+         Properties:
+           Path: /study
+           Method: post
+           
+  GetStudyRecordsByPeriodFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GetStudyRecordsByPeriod::handleRequest
+     Runtime: java8
+     Events:
+       GetStudyRecordsByPeriod:
+         Type: Api
+         Properties:
+           Path: /study/{topic}/findByPeriod
+           Method: get
+           RequestParameters:
+              - method.request.querystring.starts
+              - method.request.querystring.ends
+              
+  GetStudyRecordsByTagFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GetStudyRecordsByTag::handleRequest
+     Runtime: java8
+     Events:
+       GetStudyRecordsByTag:
+         Type: Api
+         Properties:
+           Path: /study/{topic}/findByTag
+           Method: get
+           RequestParameters:
+              - method.request.querystring.tag
+
+  GetStudyRecordsByIsConsumedFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+     CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
+     Handler: br.com.iwe.handler.GetStudyRecordsByIsConsumed::handleRequest
+     Runtime: java8
+     Events:
+       GetStudyRecordsByIsConsumed:
+         Type: Api
+         Properties:
+           Path: /study/{topic}/findByIsConsumed
+           Method: get
+           RequestParameters:
+              - method.request.querystring.isconsumed
+
+Outputs:
+
+    CreateStudyRecordFunction:
+      Description: "CreateStudyRecord Lambda Function ARN"
+      Value: !GetAtt CreateStudyRecordFunction.Arn
+      
+    GetStudyRecordsByPeriodFunction:
+      Description: "GetStudyRecordsByPeriod Lambda Function ARN"
+      Value: !GetAtt GetStudyRecordsByPeriodFunction.Arn
+      
+    GetStudyRecordsByTagFunction:
+      Description: "GetStudyRecordsByTag Lambda Function ARN"
+      Value: !GetAtt GetStudyRecordsByTagFunction.Arn
+      
+    GetStudyRecordsByIsConsumedFunction:
+      Description: "GetStudyRecordsByIsConsumed Lambda Function ARN"
+      Value: !GetAtt GetStudyRecordsByIsConsumedFunction.Arn      
+     
