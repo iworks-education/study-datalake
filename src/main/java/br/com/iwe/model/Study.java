@@ -9,7 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName = "study")
 public class Study {
 
-	@DynamoDBHashKey(attributeName = "id")
+	@DynamoDBHashKey(attributeName = "topic")
 	private String topic;
 	@DynamoDBRangeKey(attributeName = "dateTimeCreation")
 	private String dateTimeCreation;

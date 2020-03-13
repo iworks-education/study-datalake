@@ -14,6 +14,9 @@ It also uses the DynamoDBMapper ORM structure to map Study items in a DynamoDB t
 * [SAM CLI](https://github.com/awslabs/aws-sam-cli)
 * [Python 3](https://docs.python.org/3/)
 
+aws dynamodb create-table --table-name study --attribute-definitions AttributeName=topic,AttributeType=S AttributeName=dateTimeCreation,AttributeType=S AttributeName=tag,AttributeType=S AttributeName=consumed,AttributeType=S --key-schema AttributeName=topic,KeyType=HASH AttributeName=dateTimeCreation,KeyType=RANGE --local-secondary-indexes 'IndexName=tagIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=tag,KeyType=RANGE}],Projection={ProjectionType=ALL}' 'IndexName=consumedIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=consumed,KeyType=RANGE}],Projection={ProjectionType=ALL}' --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000
+
+
 ## Setup process
 
 ### Installing dependencies
@@ -27,9 +30,12 @@ mvn install
 ### Local development
 
 **Invoking function locally through local API Gateway**
-
-1. Start the SAM local API.
- - `sam local start-api `
+1. Start DynamoDB Local in a Docker container. `docker run -p 8000:8000 -v $(pwd)/local/dynamodb:/data/ amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb -dbPath /data`
+2. Create the DynamoDB table. `aws dynamodb create-table --table-name study --attribute-definitions AttributeName=topic,AttributeType=S AttributeName=dateTimeCreation,AttributeType=S AttributeName=tag,AttributeType=S AttributeName=consumed,AttributeType=S --key-schema AttributeName=topic,KeyType=HASH AttributeName=dateTimeCreation,KeyType=RANGE --local-secondary-indexes 'IndexName=tagIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=tag,KeyType=RANGE}],Projection={ProjectionType=ALL}' 'IndexName=consumedIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=consumed,KeyType=RANGE}],Projection={ProjectionType=ALL}' --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000`
+3. Start the SAM local API.
+ - On a Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json`
+ - On Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json`
+ - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
 
 If the previous command ran successfully you should now be able to hit the following local endpoint to
 invoke the functions rooted at `http://localhost:3000/study/{topic}?starts=2020-01-02&ends=2020-02-02`

@@ -1,0 +1,18 @@
+{
+	"CreateStudyRecordFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000",
+		"TABLE_NAME": "study"
+	},
+	"GetStudyRecordsByPeriodFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000",
+		"TABLE_NAME": "study"
+	},
+	"GetStudyRecordsByTagFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000",
+		"TABLE_NAME": "study"
+	},
+	"GetStudyRecordsByIsConsumedFunction": {
+		"ENDPOINT_OVERRIDE": "http://docker.for.mac.localhost:8000",
+		"TABLE_NAME": "study"
+	}
+}
