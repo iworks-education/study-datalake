@@ -14,9 +14,6 @@ It also uses the DynamoDBMapper ORM structure to map Study items in a DynamoDB t
 * [SAM CLI](https://github.com/awslabs/aws-sam-cli)
 * [Python 3](https://docs.python.org/3/)
 
-aws dynamodb create-table --table-name study --attribute-definitions AttributeName=topic,AttributeType=S AttributeName=dateTimeCreation,AttributeType=S AttributeName=tag,AttributeType=S AttributeName=consumed,AttributeType=S --key-schema AttributeName=topic,KeyType=HASH AttributeName=dateTimeCreation,KeyType=RANGE --local-secondary-indexes 'IndexName=tagIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=tag,KeyType=RANGE}],Projection={ProjectionType=ALL}' 'IndexName=consumedIndex,KeySchema=[{AttributeName=topic,KeyType=HASH},{AttributeName=consumed,KeyType=RANGE}],Projection={ProjectionType=ALL}' --billing-mode PAY_PER_REQUEST --endpoint-url http://localhost:8000
-
-
 ## Setup process
 
 ### Installing dependencies
