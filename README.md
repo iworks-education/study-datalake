@@ -35,7 +35,8 @@ mvn install
  - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
 
 If the previous command ran successfully you should now be able to hit the following local endpoint to
-invoke the functions rooted at `http://localhost:3000/study/{topic}?starts=2020-01-02&ends=2020-02-02`
+invoke the functions rooted at `http://localhost:3000/study/{topic}?starts=2020-01-02&ends=2020-02-02`.
+It shoud return 404. Now you can explore all endpoints, use the src/test/resources/Study DataLake.postman_collection.json to import a API Rest Collection into Postman.
 
 **SAM CLI** is used to emulate both Lambda and API Gateway locally and uses our `template.yaml` to
 understand how to bootstrap this environment (runtime, where the source code is, etc.) - The
