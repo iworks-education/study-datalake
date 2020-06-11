@@ -36,6 +36,8 @@ If the table already exist, you can delete: `aws dynamodb delete-table --table-n
  - On a Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json`
  - On Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json`
  - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
+ 
+ OBS:  If you already have the container locally (in your case the java8), then you can use --skip-pull-image to remove the download
 
 If the previous command ran successfully you should now be able to hit the following local endpoint to
 invoke the functions rooted at `http://localhost:3000/study/{topic}?starts=2020-01-02&ends=2020-02-02`.
