@@ -1,6 +1,8 @@
 package br.com.iwe.handler;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -9,6 +11,7 @@ import br.com.iwe.dao.StudyRepository;
 import br.com.iwe.model.HandlerRequest;
 import br.com.iwe.model.HandlerResponse;
 import br.com.iwe.model.Study;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 
 public class GetStudyRecordsByTag implements RequestHandler<HandlerRequest, HandlerResponse> {
 
@@ -22,12 +25,12 @@ public class GetStudyRecordsByTag implements RequestHandler<HandlerRequest, Hand
 
 		context.getLogger().log("Searching for registered studies for " + topic + " and tag equals " + tag);
 
-		final List<Study> studies = this.repository.findByTag(topic, tag);
+		final Stream<Page<Study>> studies = this.repository.findByTag(topic, tag);
 
-		if (studies == null || studies.isEmpty()) {
-			return HandlerResponse.builder().setStatusCode(404).build();
-		}
+		final List<Study> jsonResult = new ArrayList<>();
 
-		return HandlerResponse.builder().setStatusCode(200).setObjectBody(studies).build();
+		studies.forEach(s -> s.items().forEach(k -> jsonResult.add(k)));
+
+		return HandlerResponse.builder().setStatusCode(200).setObjectBody(jsonResult).build();
 	}
 }

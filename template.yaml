@@ -2,26 +2,45 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
     study-datalake
-
     Rest API to manage a Data Lake of study links
 
 Globals:
     Function:
-        Timeout: 20
-        MemorySize: 512
+        Timeout: 100
+        MemorySize: 256
         Environment:
           Variables:
             TABLE_NAME: !Ref StudyTable
             ENDPOINT_OVERRIDE: ""
-
+            
+Parameters:
+   CognitoUsePoolARN:
+      Type: String
+      Default: arn:aws:cognito-idp:us-east-1:729449663161:userpool/us-east-1_6qFmqyEYn
+   
 Resources:
 
+  APIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      EndpointConfiguration: REGIONAL
+      Auth:
+        DefaultAuthorizer: MyCognitoAuth
+        Authorizers:
+          MyCognitoAuth:
+            UserPoolArn: !Ref CognitoUsePoolARN
+            Identity:
+              Header: Authorization
+              ReauthorizeEvery: 30
+      
   CreateStudyRecordFunction:
     Type: AWS::Serverless::Function
     Properties:
      CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
      Handler: br.com.iwe.handler.CreateStudyRecord::handleRequest
      Runtime: java8
+     Tracing: Active
      Policies:
        - DynamoDBCrudPolicy:
            TableName: !Ref StudyTable     
@@ -29,15 +48,18 @@ Resources:
        CreateStudyRecord:
          Type: Api
          Properties:
+           RestApiId:
+              Ref: APIGateway
            Path: /study
            Method: post
-           
+
   GetStudyRecordsByPeriodFunction:
     Type: AWS::Serverless::Function
     Properties:
      CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
      Handler: br.com.iwe.handler.GetStudyRecordsByPeriod::handleRequest
      Runtime: java8
+     Tracing: Active
      Policies:
        - DynamoDBCrudPolicy:
            TableName: !Ref StudyTable     
@@ -45,18 +67,22 @@ Resources:
        GetStudyRecordsByPeriod:
          Type: Api
          Properties:
+           RestApiId:
+              Ref: APIGateway
            Path: /study/{topic}/findByPeriod
            Method: get
            RequestParameters:
               - method.request.querystring.starts
               - method.request.querystring.ends
               
+
   GetStudyRecordsByTagFunction:
     Type: AWS::Serverless::Function
     Properties:
      CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
      Handler: br.com.iwe.handler.GetStudyRecordsByTag::handleRequest
      Runtime: java8
+     Tracing: Active
      Policies:
        - DynamoDBCrudPolicy:
            TableName: !Ref StudyTable     
@@ -64,6 +90,8 @@ Resources:
        GetStudyRecordsByTag:
          Type: Api
          Properties:
+           RestApiId:
+              Ref: APIGateway
            Path: /study/{topic}/findByTag
            Method: get
            RequestParameters:
@@ -75,6 +103,7 @@ Resources:
      CodeUri: target/study-datalake-1.0.0-SNAPSHOT-jar-with-dependencies.jar
      Handler: br.com.iwe.handler.GetStudyRecordsByIsConsumed::handleRequest
      Runtime: java8
+     Tracing: Active
      Policies:
        - DynamoDBCrudPolicy:
            TableName: !Ref StudyTable
@@ -82,15 +111,17 @@ Resources:
        GetStudyRecordsByIsConsumed:
          Type: Api
          Properties:
+           RestApiId:
+              Ref: APIGateway
            Path: /study/{topic}/findByIsConsumed
            Method: get
            RequestParameters:
               - method.request.querystring.isconsumed
-              
+
   StudyTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: study
+      TableName: Study
       AttributeDefinitions:
         - AttributeName: topic
           AttributeType: S

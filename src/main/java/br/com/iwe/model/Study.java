@@ -1,28 +1,19 @@
 package br.com.iwe.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSecondarySortKey;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortKey;
 
-@DynamoDBTable(tableName = "study")
+@DynamoDbBean
 public class Study {
 
-	@DynamoDBHashKey(attributeName = "topic")
 	private String topic;
-	@DynamoDBRangeKey(attributeName = "dateTimeCreation")
 	private String dateTimeCreation;
-
-	@DynamoDBIndexRangeKey(attributeName = "tag", localSecondaryIndexName = "tagIndex")
 	private String tag;
-
-	@DynamoDBAttribute(attributeName = "url")
 	private String url;
-	@DynamoDBAttribute(attributeName = "description")
 	private String description;
-
-	@DynamoDBIndexRangeKey(attributeName = "consumed", localSecondaryIndexName = "consumedIndex")
 	private String consumed;
 
 	public Study(String topic, String dateTimeCreation, String tag, String url, String description, String consumed) {
@@ -34,57 +25,66 @@ public class Study {
 		this.description = description;
 		this.consumed = consumed;
 	}
+	
+	public Study(final String topic) {
+		this.topic = topic;
+	}
 
 	public Study() {
 		super();
 	}
 
+	@DynamoDbPartitionKey
 	public String getTopic() {
 		return topic;
 	}
 
-	public void setTopic(String topic) {
-		this.topic = topic;
-	}
-
+	@DynamoDbSortKey
 	public String getDateTimeCreation() {
 		return dateTimeCreation;
 	}
 
-	public void setDateTimeCreation(String dateTimeCreation) {
-		this.dateTimeCreation = dateTimeCreation;
-	}
-
+	@DynamoDbSecondarySortKey(indexNames = "tagIndex")
 	public String getTag() {
 		return tag;
+	}
+
+	@DynamoDbAttribute(value = "url")
+	public String getUrl() {
+		return url;
+	}
+
+	@DynamoDbAttribute(value = "description")
+	public String getDescription() {
+		return description;
+	}
+
+	@DynamoDbSecondarySortKey(indexNames = "consumedIndex")
+	public String getConsumed() {
+		return consumed;
 	}
 
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
 
-	public String getUrl() {
-		return url;
-	}
-
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public String getConsumed() {
-		return consumed;
-	}
-
 	public void setConsumed(String consumed) {
 		this.consumed = consumed;
 	}
 
+	public void setDateTimeCreation(String dateTimeCreation) {
+		this.dateTimeCreation = dateTimeCreation;
+	}
+
+	public void setTopic(String topic) {
+		this.topic = topic;
+	}
 }

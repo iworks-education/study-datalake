@@ -1,73 +1,84 @@
 package br.com.iwe.dao;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.stream.Stream;
 
 import br.com.iwe.model.Study;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbIndex;
+import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
+import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 public class StudyRepository {
 
-	private static final DynamoDBMapper mapper = DynamoDBManager.mapper();
+	private static DynamoDbTable<Study> studyTable = null;
+
+	static {
+		String endpoint = System.getenv("ENDPOINT_OVERRIDE");
+
+		if (endpoint == null || endpoint.isEmpty()) {
+			endpoint = "https://dynamodb.us-east-1.amazonaws.com";
+		}
+
+		URI uri;
+		try {
+			uri = new URI(endpoint);
+		} catch (URISyntaxException e) {
+			throw new IllegalArgumentException(e.getCause());
+		}
+
+		final Region region = Region.US_EAST_1;
+		final DynamoDbClient ddb = DynamoDbClient.builder().region(region).endpointOverride(uri)
+				.httpClient(UrlConnectionHttpClient.builder().build())
+				.credentialsProvider(EnvironmentVariableCredentialsProvider.create())
+				.overrideConfiguration(ClientOverrideConfiguration.builder().build()).build();
+
+		studyTable = DynamoDbEnhancedClient.builder().dynamoDbClient(ddb).build().table("Study",
+				TableSchema.fromBean(Study.class));
+		
+	
+		studyTable.getItem(Key.builder().partitionValue("Boost").sortValue("2020-06-29T14:40:59Z").build());		
+	}
 
 	public Study save(final Study study) {
-		mapper.save(study);
+		studyTable.putItem(study);
 		return study;
 	}
 
-	public List<Study> findByPeriod(final String topic, final String starts, final String ends) {
+	public Stream<Page<Study>> findByPeriod(final String topic, final String starts, final String ends) {
 
-		final Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-		eav.put(":val1", new AttributeValue().withS(topic));
-		eav.put(":val2", new AttributeValue().withS(starts));
-		eav.put(":val3", new AttributeValue().withS(ends));
+		final QueryConditional sortValueBetween = QueryConditional.sortBetween(
+				k -> k.partitionValue(topic).sortValue(starts), k -> k.partitionValue(topic).sortValue(ends));
 
-		final DynamoDBQueryExpression<Study> queryExpression = new DynamoDBQueryExpression<Study>()
-				.withKeyConditionExpression("topic = :val1 and dateTimeCreation between :val2 and :val3")
-				.withExpressionAttributeValues(eav);
+		return studyTable.query(r -> r.queryConditional(sortValueBetween)).stream();
 
-		final List<Study> studies = mapper.query(Study.class, queryExpression);
-
-		return studies;
 	}
 
-	public List<Study> findByTag(final String topic, final String tag) {
+	public Stream<Page<Study>> findByTag(final String topic, final String tag) {
 
-		final Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-		eav.put(":val1", new AttributeValue().withS(topic));
-		eav.put(":val2", new AttributeValue().withS(tag));
+		final DynamoDbIndex<Study> index = studyTable.index("tagIndex");
 
-		final DynamoDBQueryExpression<Study> queryExpression = new DynamoDBQueryExpression<Study>()
-				.withIndexName("tagIndex").withConsistentRead(false)
-				.withKeyConditionExpression("topic = :val1 and tag=:val2").withExpressionAttributeValues(eav);
+		final QueryConditional conditional = QueryConditional.keyEqualTo(k -> k.partitionValue(topic).sortValue(tag));
 
-		final List<Study> studies = mapper.query(Study.class, queryExpression);
-
-		return studies;
+		return index.query(r -> r.queryConditional(conditional)).stream();
 	}
 
-	public List<Study> findByIsConsumed(final String topic, final String isConsumed) {
+	public Stream<Page<Study>> findByIsConsumed(final String topic, final String isConsumed) {
 
-		final Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-		eav.put(":val1", new AttributeValue().withS(topic));
-		eav.put(":val2", new AttributeValue().withS(isConsumed));
+		final DynamoDbIndex<Study> index = studyTable.index("consumedIndex");
 
-		final Map<String, String> expression = new HashMap<>();
+		final QueryConditional conditional = QueryConditional
+				.keyEqualTo(k -> k.partitionValue(topic).sortValue(isConsumed));
 
-		// consumed is a reserver word in DynamoDB
-		expression.put("#consumed", "consumed");
-
-		final DynamoDBQueryExpression<Study> queryExpression = new DynamoDBQueryExpression<Study>()
-				.withIndexName("consumedIndex").withConsistentRead(false)
-				.withKeyConditionExpression("topic = :val1 and #consumed=:val2").withExpressionAttributeValues(eav)
-				.withExpressionAttributeNames(expression);
-
-		final List<Study> studies = mapper.query(Study.class, queryExpression);
-
-		return studies;
+		return index.query(r -> r.queryConditional(conditional)).stream();
 	}
 }
