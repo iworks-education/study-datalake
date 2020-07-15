@@ -34,7 +34,7 @@ Resources:
   CreateStudyRecordFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/940da5659aecb52cb3221246943b0c01
+      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
       Handler: br.com.iwe.handler.CreateStudyRecord::handleRequest
       Runtime: java8
       Tracing: Active
@@ -53,7 +53,7 @@ Resources:
   GetStudyRecordsByPeriodFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/940da5659aecb52cb3221246943b0c01
+      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
       Handler: br.com.iwe.handler.GetStudyRecordsByPeriod::handleRequest
       Runtime: java8
       Tracing: Active
@@ -75,7 +75,7 @@ Resources:
   GetStudyRecordsByTagFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/940da5659aecb52cb3221246943b0c01
+      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
       Handler: br.com.iwe.handler.GetStudyRecordsByTag::handleRequest
       Runtime: java8
       Tracing: Active
@@ -96,7 +96,7 @@ Resources:
   GetStudyRecordsByIsConsumedFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/940da5659aecb52cb3221246943b0c01
+      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
       Handler: br.com.iwe.handler.GetStudyRecordsByIsConsumed::handleRequest
       Runtime: java8
       Tracing: Active
