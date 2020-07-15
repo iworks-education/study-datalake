@@ -6,9 +6,7 @@ phases:
       java: corretto8
   pre_build:
     commands:
-      - pip install --upgrade pip
-      - pip install pipenv --user
-      - pipenv install awscli aws-sam-cli
+      - echo No Build Commands
   build:
     commands:
       - echo Build started on `date`
