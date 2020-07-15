@@ -1,0 +1,25 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+  pre_build:
+    commands:
+      - pip install --upgrade pip
+      - pip install pipenv --user
+      - pipenv install awscli aws-sam-cli
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn clean install
+      - pipenv run sam package --template-file template.yaml --s3-bucket sam-mb-dev-deploy --output-template-file packaged-template.yaml
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - packaged-template.yaml
+cache:
+  paths:
+    - '/root/.m2/**/*'
