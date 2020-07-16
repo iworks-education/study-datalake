@@ -24,7 +24,7 @@ Resources:
         DefaultAuthorizer: MyCognitoAuth
         Authorizers:
           MyCognitoAuth:
-            UserPoolArn: '{{resolve:ssm:studyDataLakeUserPoolArn:1}}'
+            UserPoolArn: '{{resolve:ssm:studyDataLakeUserPoolArn:2}}'
             Identity:
               Header: Authorization
               ReauthorizeEvery: 30
