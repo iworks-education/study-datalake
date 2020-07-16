@@ -7,7 +7,7 @@ Description: >
 Globals:
     Function:
         Timeout: 100
-        MemorySize: 256
+        MemorySize: 512
         Environment:
           Variables:
             TABLE_NAME: !Ref StudyTable
