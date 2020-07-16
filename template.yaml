@@ -12,11 +12,6 @@ Globals:
           Variables:
             TABLE_NAME: !Ref StudyTable
             ENDPOINT_OVERRIDE: ""
-            
-Parameters:
-   CognitoUsePoolARN:
-      Type: String
-      Default: arn:aws:cognito-idp:us-east-1:729449663161:userpool/us-east-1_6qFmqyEYn
    
 Resources:
 
@@ -29,7 +24,7 @@ Resources:
         DefaultAuthorizer: MyCognitoAuth
         Authorizers:
           MyCognitoAuth:
-            UserPoolArn: !Ref CognitoUsePoolARN
+            UserPoolArn: '{{resolve:ssm:studyDataLakeUserPoolArn:1}}'
             Identity:
               Header: Authorization
               ReauthorizeEvery: 30
