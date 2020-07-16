@@ -11,7 +11,7 @@ phases:
     commands:
       - echo Build started on `date`
       - mvn clean install
-      - pipenv run sam package --template-file template.yaml --s3-bucket sam-mb-dev-deploy --output-template-file packaged-template.yaml
+      - pipenv run sam package --template-file template.yaml --s3-bucket codepipeline-us-east-1-191905640096 --output-template-file packaged-template.yaml
   post_build:
     commands:
       - echo Build completed on `date`
