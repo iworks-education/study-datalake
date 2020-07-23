@@ -6,7 +6,7 @@ Description: 'study-datalake Rest API to manage a Data Lake of study links
 Globals:
   Function:
     Timeout: 100
-    MemorySize: 256
+    MemorySize: 512
     Environment:
       Variables:
         TABLE_NAME:
@@ -22,14 +22,14 @@ Resources:
         DefaultAuthorizer: MyCognitoAuth
         Authorizers:
           MyCognitoAuth:
-            UserPoolArn: '{{resolve:ssm:studyDataLakeUserPoolArn}}'
+            UserPoolArn: '{{resolve:ssm:studyDataLakeUserPoolArn:2}}'
             Identity:
               Header: Authorization
               ReauthorizeEvery: 30
   CreateStudyRecordFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
+      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
       Handler: br.com.iwe.handler.CreateStudyRecord::handleRequest
       Runtime: java8
       Tracing: Active
@@ -48,7 +48,7 @@ Resources:
   GetStudyRecordsByPeriodFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
+      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
       Handler: br.com.iwe.handler.GetStudyRecordsByPeriod::handleRequest
       Runtime: java8
       Tracing: Active
@@ -70,7 +70,7 @@ Resources:
   GetStudyRecordsByTagFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
+      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
       Handler: br.com.iwe.handler.GetStudyRecordsByTag::handleRequest
       Runtime: java8
       Tracing: Active
@@ -91,7 +91,7 @@ Resources:
   GetStudyRecordsByIsConsumedFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/f37d75b7451d3c873c0a6430ea8f256f
+      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
       Handler: br.com.iwe.handler.GetStudyRecordsByIsConsumed::handleRequest
       Runtime: java8
       Tracing: Active

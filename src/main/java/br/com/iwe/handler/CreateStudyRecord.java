@@ -30,7 +30,7 @@ public class CreateStudyRecord implements RequestHandler<HandlerRequest, Handler
 		final Study studyRecorded = repository.save(study);
 		
 		final Map<String, String> headers = new HashMap<>();
-		headers.put("message", "study record created");
+		headers.put("message", "study record created success");
 		
 		
 		return HandlerResponse.builder().setStatusCode(201).setObjectBody(studyRecorded).setHeaders(headers).build();
