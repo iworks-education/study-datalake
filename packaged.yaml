@@ -6,7 +6,7 @@ Description: 'study-datalake Rest API to manage a Data Lake of study links
 Globals:
   Function:
     Timeout: 100
-    MemorySize: 512
+    MemorySize: 256
     Environment:
       Variables:
         TABLE_NAME:
