@@ -12,7 +12,7 @@ import br.com.iwe.model.Study;
 
 public class StudyRepository {
 
-	private final DynamoDBMapper mapper = new DynamoDBManager().mapper();
+	private final static DynamoDBMapper mapper = new DynamoDBManager().mapper();
 
 	public Study save(final Study study) {
 		mapper.save(study);
