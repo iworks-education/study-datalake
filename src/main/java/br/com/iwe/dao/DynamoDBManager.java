@@ -14,9 +14,9 @@ import br.com.iwe.model.Study;
 
 public class DynamoDBManager {
 
-	private DynamoDBMapper mapper;
+	private static DynamoDBMapper mapper;
 
-	public DynamoDBManager() {
+	static {
 
 		AmazonDynamoDB ddb = null;
 		final String endpoint = System.getenv("ENDPOINT_OVERRIDE");
