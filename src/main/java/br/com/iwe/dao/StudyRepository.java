@@ -27,7 +27,7 @@ public class StudyRepository {
 		eav.put(":val3", new AttributeValue().withS(ends));
 
 		final DynamoDBQueryExpression<Study> queryExpression = new DynamoDBQueryExpression<Study>()
-				.withKeyConditionExpression("topic = :val1 and dateTimeCreation between :val2 and :val3")
+				.withKeyConditionExpression("topic = :val1 and dateRFCFGTimeCreation between :val2 and :val3")
 				.withExpressionAttributeValues(eav);
 
 		final List<Study> studies = mapper.query(Study.class, queryExpression);
