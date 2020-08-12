@@ -1,6 +1,7 @@
 package br.com.iwe.handler;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
@@ -26,6 +27,10 @@ public class CreateStudyRecord implements RequestHandler<HandlerRequest, Handler
 		}
 		context.getLogger().log("Creating a new study record for the topic " + study.getTopic());
 		final Study studyRecorded = repository.save(study);
-		return HandlerResponse.builder().setStatusCode(201).setObjectBody(studyRecorded).build();
+		
+		final HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("message", "This is a test to Alelo");
+		
+		return HandlerResponse.builder().setStatusCode(201).setHeaders(headers).setObjectBody(studyRecorded).build();
 	}
 }
