@@ -9,6 +9,7 @@ import br.com.iwe.dao.StudyRepository;
 import br.com.iwe.model.HandlerRequest;
 import br.com.iwe.model.HandlerResponse;
 import br.com.iwe.model.Study;
+import software.amazon.codeguruprofilerjavaagent.LambdaProfiler;
 
 public class GetStudyRecordsByTag implements RequestHandler<HandlerRequest, HandlerResponse> {
 
@@ -16,10 +17,16 @@ public class GetStudyRecordsByTag implements RequestHandler<HandlerRequest, Hand
 
 	@Override
 	public HandlerResponse handleRequest(HandlerRequest request, Context context) {
+		return LambdaProfiler.profile(request, context, this::myHandlerFunction);
+	}
 
+	public HandlerResponse myHandlerFunction(HandlerRequest request, Context context) {
+		// your function code here
 		final String topic = request.getPathParameters().get("topic");
 		final String tag = request.getQueryStringParameters().get("tag");
 
+		context.getLogger().log("Inserting new code to test");
+		
 		context.getLogger().log("Searching for registered studies for " + topic + " and tag equals " + tag);
 
 		final List<Study> studies = this.repository.findByTag(topic, tag);
@@ -30,4 +37,5 @@ public class GetStudyRecordsByTag implements RequestHandler<HandlerRequest, Hand
 
 		return HandlerResponse.builder().setStatusCode(200).setObjectBody(studies).build();
 	}
+
 }

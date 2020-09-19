@@ -5,8 +5,8 @@ Description: 'study-datalake Rest API to manage a Data Lake of study links
   '
 Globals:
   Function:
-    Timeout: 100
-    MemorySize: 256
+    Timeout: 110
+    MemorySize: 512
     Environment:
       Variables:
         TABLE_NAME:
@@ -18,18 +18,11 @@ Resources:
     Properties:
       StageName: prod
       EndpointConfiguration: REGIONAL
-      Auth:
-        DefaultAuthorizer: MyCognitoAuth
-        Authorizers:
-          MyCognitoAuth:
-            UserPoolArn: '{{resolve:ssm:studyDataLakeUserPoolArn:2}}'
-            Identity:
-              Header: Authorization
-              ReauthorizeEvery: 30
+      TracingEnabled: true
   CreateStudyRecordFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
+      CodeUri: s3://sam-advdev-deploy/9d2f8ece9f7c7043b86c74ebad627a41
       Handler: br.com.iwe.handler.CreateStudyRecord::handleRequest
       Runtime: java8
       Tracing: Active
@@ -48,7 +41,7 @@ Resources:
   GetStudyRecordsByPeriodFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
+      CodeUri: s3://sam-advdev-deploy/9d2f8ece9f7c7043b86c74ebad627a41
       Handler: br.com.iwe.handler.GetStudyRecordsByPeriod::handleRequest
       Runtime: java8
       Tracing: Active
@@ -70,10 +63,17 @@ Resources:
   GetStudyRecordsByTagFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
+      CodeUri: s3://sam-advdev-deploy/9d2f8ece9f7c7043b86c74ebad627a41
       Handler: br.com.iwe.handler.GetStudyRecordsByTag::handleRequest
       Runtime: java8
       Tracing: Active
+      AutoPublishAlias: live
+      DeploymentPreference:
+        Type: Canary10Percent5Minutes
+      Environment:
+        Variables:
+          AWS_CODEGURU_PROFILER_GROUP_ARN: arn:aws:codeguru-profiler:us-west-2:449795832125:profilingGroup/StudyDataLake
+          AWS_CODEGURU_PROFILER_ENABLED: true
       Policies:
       - DynamoDBCrudPolicy:
           TableName:
@@ -91,7 +91,7 @@ Resources:
   GetStudyRecordsByIsConsumedFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://sam-mb-dev-deploy/fc8aa6c61e4697af18f0afde6b1e23cf
+      CodeUri: s3://sam-advdev-deploy/9d2f8ece9f7c7043b86c74ebad627a41
       Handler: br.com.iwe.handler.GetStudyRecordsByIsConsumed::handleRequest
       Runtime: java8
       Tracing: Active
