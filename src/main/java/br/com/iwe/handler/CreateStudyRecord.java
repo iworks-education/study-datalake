@@ -29,7 +29,7 @@ public class CreateStudyRecord implements RequestHandler<HandlerRequest, Handler
 		final Study studyRecorded = repository.save(study);
 		
 		final HashMap<String, String> headers = new HashMap<String, String>();
-		headers.put("message", "This is a test to Alelo");
+		headers.put("message", "Isto eh um teste para a B2W");
 		
 		return HandlerResponse.builder().setStatusCode(201).setHeaders(headers).setObjectBody(studyRecorded).build();
 	}
