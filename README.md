@@ -34,8 +34,8 @@ If the table already exist, you can delete: `aws dynamodb delete-table --table-n
 
 3. Start the SAM local API.
  - On a Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json --skip-pull-image --warm-containers eager`
- - On Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json`
- - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
+ - On Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json --skip-pull-image --warm-containers eager`
+ - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json --skip-pull-image --warm-containers eager`
  
  OBS:  
  
