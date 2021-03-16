@@ -65,7 +65,7 @@ deploy anything - If you don't have a S3 bucket to store code artifacts then thi
 create one:
 
 ```bash
-export BUCKET_NAME=my_cool_new_bucket
+export BUCKET_NAME=my-cool-new-bucket
 aws s3 mb s3://$BUCKET_NAME
 ```
 
