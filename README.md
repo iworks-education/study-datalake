@@ -33,11 +33,17 @@ mvn install
 If the table already exist, you can delete: `aws dynamodb delete-table --table-name study --endpoint-url http://localhost:8000`
 
 3. Start the SAM local API.
- - On a Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json`
+ - On a Mac: `sam local start-api --env-vars src/test/resources/test_environment_mac.json --skip-pull-image --warm-containers eager`
  - On Windows: `sam local start-api --env-vars src/test/resources/test_environment_windows.json`
  - On Linux: `sam local start-api --env-vars src/test/resources/test_environment_linux.json`
  
- OBS:  If you already have the container locally (in your case the java8), then you can use --skip-pull-image to remove the download
+ OBS:  
+ 
+ (1) If you already have the container locally (in your case the java8), then you can use --skip-pull-image to remove the download
+ (2) --warm-containers eager: Specifies how AWS SAM CLI manages containers for each function.
+ Two modes are available: 
+ EAGER: Containers for all functions are loaded at startup and persist between invocations.
+ LAZY:  Containers are only loaded when each function is first invoked. Those containers persist for additional invocations.
 
 If the previous command ran successfully you should now be able to hit the following local endpoint to
 invoke the functions rooted at `http://localhost:3000/study/{topic}?starts=2020-01-02&ends=2020-02-02`.
